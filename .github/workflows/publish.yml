@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_notes_en:
+        description: English user-facing release summary
+        required: true
+        type: string
+      release_notes_zh:
+        description: Chinese user-facing release summary
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  accept-and-release:
+    runs-on: windows-2025
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v5
+        with: { version: 11.19.0, run_install: false }
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm run check
+      - name: Accept official DSH install, startup, removal, and reinstall
+        shell: pwsh
+        run: ./.github/scripts/accept-official-release.ps1 -PackagePath (Get-Item .artifacts/dsh-dictation-*.tgz).FullName
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+      - name: Publish npm Beta with trusted publishing
+        shell: bash
+        run: |
+          npm install --global npm@12.0.2
+          npm publish .artifacts/dsh-dictation-*.tgz --access public --tag beta
+      - name: Write release notes
+        shell: bash
+        env:
+          NOTES_EN: ${{ inputs.release_notes_en }}
+          NOTES_ZH: ${{ inputs.release_notes_zh }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          cat > .artifacts/release.md <<NOTES
+          ## What's new
+
+          $NOTES_EN
+
+          ## Install or update
+
+          \`\`\`powershell
+          irm 'https://github.com/WSL043/dsh-dictation/releases/download/v$VERSION/install.ps1' | iex
+          \`\`\`
+
+          ## 中文
+
+          ## 更新内容
+
+          $NOTES_ZH
+
+          ## 安装或更新
+
+          \`\`\`powershell
+          irm 'https://github.com/WSL043/dsh-dictation/releases/download/v$VERSION/install.ps1' | iex
+          \`\`\`
+          NOTES
+      - name: Create prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: gh release create "$TAG" --target "$GITHUB_SHA" --title "DSH Dictation $TAG" --notes-file .artifacts/release.md --prerelease .artifacts/dsh-dictation-*.tgz install.ps1

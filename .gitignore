@@ -1,0 +1,7 @@
+node_modules/
+lib/
+.artifacts/
+coverage/
+.playwright-cli/
+output/playwright/
+*.log
