@@ -1,71 +1,71 @@
-# DSH Dictation
+# DSH 语音输入
 
-Editable speech-to-text for the DeepSeek Harness composer.
+为 DeepSeek Harness 输入框提供可编辑的语音转文字。
 
 [![CI](https://github.com/WSL043/dsh-dictation/actions/workflows/ci.yml/badge.svg)](https://github.com/WSL043/dsh-dictation/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/dsh-dictation)](https://www.npmjs.com/package/dsh-dictation)
-[![npm downloads](https://img.shields.io/npm/dt/dsh-dictation)](https://www.npmjs.com/package/dsh-dictation)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![npm 下载量](https://img.shields.io/npm/dt/dsh-dictation)](https://www.npmjs.com/package/dsh-dictation)
+[![许可证：MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-[简体中文](./README.zh-CN.md)
+[English](./README.en.md)
 
-![DSH Dictation in the official DeepSeek Harness composer](./docs/images/dictation-composer-dark-en.png)
+![DSH 官方界面中的语音输入](./docs/images/dictation-composer-dark.png)
 
-One microphone sits directly beside Send. Start speaking, review the editable transcript in the composer, then decide when to send it.
+麦克风紧靠发送按钮左侧。说完后先在输入框里检查、修改识别结果，再由用户决定是否发送。
 
-## Highlights
+## 主要能力
 
-- Writes recognition results into the current draft and never submits automatically.
-- Uses one consistent microphone for local recognition or Codex Desktop dictation.
-- Starts or stops with the microphone or `Ctrl+Shift+D`; Escape cancels local capture without changing the draft.
-- Keeps model downloads and source selection in a dedicated **Settings → Dictation** page.
-- Downloads no speech model until the user asks for one; every local model can be removed independently.
+- 识别结果只写入当前草稿，不会自动发送。
+- 本地模型和 Codex Desktop 共用同一个麦克风入口。
+- 点击麦克风或按 `Ctrl+Shift+D` 开始、停止；本地录音时按 Escape 会取消且不修改草稿。
+- 在独立的 **设置 → 语音输入** 页面选择来源、下载或卸载模型。
+- 插件本身不携带语音模型，只有用户主动点击下载时才获取。
 
-![Dictation sources and local model management](./docs/images/dictation-settings-dark-en.png)
+![语音来源与本地模型管理](./docs/images/dictation-settings-dark.png)
 
-## Recognition sources
+## 识别来源
 
-| Source | Best fit | Boundary |
+| 来源 | 适合场景 | 能力边界 |
 | --- | --- | --- |
-| **SenseVoice Small** | Private local dictation in Mandarin, Cantonese, English, Japanese and Korean | Balanced default, about 228 MB. Noisy speech, punctuation and long-form accuracy can be lower than a desktop service. |
-| **Paraformer Small** | Fast local Mandarin and English | Lightest option, about 78 MB. Other languages and dialect-heavy speech are outside its intended range. |
-| **Nemotron 3.5 ASR** | Local multilingual recognition with automatic language detection | About 712 MB plus a native runtime. It uses the most memory and CPU of the local choices. |
-| **Codex global dictation (Beta)** | Reusing an installed Codex Desktop dictation setup | Codex must be running with a global toggle shortcut configured. The plugin reads no Codex account data. |
+| **SenseVoice Small** | 普通话、粤语、英语、日语和韩语的本地听写 | 默认均衡方案，约 228 MB。嘈杂环境、标点和长语音精度可能低于桌面服务。 |
+| **Paraformer Small** | 快速识别普通话和英语 | 体积最小，约 78 MB。其他语言和方言较多的语音不在主要适用范围。 |
+| **Nemotron 3.5 ASR** | 本地多语言识别与自动语言检测 | 约 712 MB，另带本机运行时。本地方案中内存和 CPU 占用最高。 |
+| **Codex 全局听写（Beta）** | 复用已安装的 Codex Desktop 听写能力 | 需要 Codex 正在运行且已配置全局切换快捷键；插件不会读取 Codex 账号数据。 |
 
-## Install
+## 安装
 
-Standard DSH command:
+DSH 标准命令：
 
 ```sh
 dsh plugin --profile web add dsh-dictation@0.1.0-beta.1
 ```
 
-Save active work and restart DSH manually after installation.
+安装完成后请先保存正在进行的工作，再手动重启 DSH。
 
-## Update and uninstall
+## 更新与卸载
 
-Run the installation command again with the desired version. To remove the plugin:
+使用目标版本重新运行安装命令。卸载插件：
 
 ```sh
 dsh plugin --profile web remove dsh-dictation
 ```
 
-Downloaded local models are managed separately from **Settings → Dictation**.
+已下载的本地模型需要在 **设置 → 语音输入** 中单独管理。
 
-## Privacy
+## 隐私
 
-- SenseVoice, Paraformer and Nemotron run locally after their model files are downloaded.
-- Codex Desktop mode uses only the configured global dictation shortcut and does not read Codex credentials or account data.
-- Dictation writes only to the editable DSH draft and never sends a message.
+- SenseVoice、Paraformer 和 Nemotron 下载后均在本机运行。
+- Codex Desktop 模式只使用已配置的全局听写快捷键，不读取 Codex 凭据或账号数据。
+- 听写结果只写入可编辑的 DSH 草稿，不会自动发送。
 
-## Compatibility
+## 兼容性
 
-Tested in the latest stable DeepSeek Harness release. Preview support is published only after separate acceptance.
+已通过最新稳定版 DeepSeek Harness 验收。预览版兼容性只在独立验收后发布。
 
-## Feedback
+## 反馈
 
-[Report a problem](https://github.com/WSL043/dsh-dictation/issues/new/choose)
+[反馈问题](https://github.com/WSL043/dsh-dictation/issues/new/choose)
 
-## License
+## 许可证
 
-MIT. See [LICENSE](./LICENSE) and [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+MIT。详见 [LICENSE](./LICENSE) 和 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
