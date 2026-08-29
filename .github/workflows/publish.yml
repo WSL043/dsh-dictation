@@ -66,8 +66,8 @@ jobs:
 
           ## Install or update
 
-          \`\`\`powershell
-          irm 'https://github.com/WSL043/dsh-dictation/releases/download/v$VERSION/install.ps1' | iex
+          \`\`\`sh
+          dsh plugin --profile web add dsh-dictation@$VERSION
           \`\`\`
 
           ## 中文
@@ -78,8 +78,8 @@ jobs:
 
           ## 安装或更新
 
-          \`\`\`powershell
-          irm 'https://github.com/WSL043/dsh-dictation/releases/download/v$VERSION/install.ps1' | iex
+          \`\`\`sh
+          dsh plugin --profile web add dsh-dictation@$VERSION
           \`\`\`
           NOTES
       - name: Create prerelease
@@ -87,4 +87,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
-        run: gh release create "$TAG" --target "$GITHUB_SHA" --title "DSH Dictation $TAG" --notes-file .artifacts/release.md --prerelease .artifacts/dsh-dictation-*.tgz install.ps1
+        run: gh release create "$TAG" --target "$GITHUB_SHA" --title "DSH Dictation $TAG" --notes-file .artifacts/release.md --prerelease .artifacts/dsh-dictation-*.tgz

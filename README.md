@@ -34,13 +34,7 @@ One microphone sits directly beside Send. Start speaking, review the editable tr
 
 ## Install
 
-PowerShell installer:
-
-```powershell
-irm 'https://github.com/WSL043/dsh-dictation/releases/download/v0.1.0-beta.1/install.ps1' | iex
-```
-
-Official DSH command:
+Standard DSH command:
 
 ```sh
 dsh plugin --profile web add dsh-dictation@0.1.0-beta.1
@@ -50,7 +44,7 @@ Save active work and restart DSH manually after installation.
 
 ## Update and uninstall
 
-Run either installation command again with the desired version. To remove the plugin:
+Run the installation command again with the desired version. To remove the plugin:
 
 ```sh
 dsh plugin --profile web remove dsh-dictation

@@ -34,13 +34,7 @@
 
 ## 安装
 
-PowerShell 安装助手：
-
-```powershell
-irm 'https://github.com/WSL043/dsh-dictation/releases/download/v0.1.0-beta.1/install.ps1' | iex
-```
-
-DSH 官方命令：
+DSH 标准命令：
 
 ```sh
 dsh plugin --profile web add dsh-dictation@0.1.0-beta.1
@@ -50,7 +44,7 @@ dsh plugin --profile web add dsh-dictation@0.1.0-beta.1
 
 ## 更新与卸载
 
-使用目标版本重新运行任一安装命令。卸载插件：
+使用目标版本重新运行安装命令。卸载插件：
 
 ```sh
 dsh plugin --profile web remove dsh-dictation

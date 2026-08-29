@@ -31,11 +31,3 @@ jobs:
           path: .artifacts/*.tgz
           if-no-files-found: error
           include-hidden-files: true
-
-  windows-installer:
-    runs-on: windows-2025
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with: { node-version: 24, package-manager-cache: false }
-      - run: node --test tests/windows-installer.test.mjs
