@@ -3,6 +3,19 @@ import { readFile } from 'node:fs/promises'
 import test from 'node:test'
 import { MODELS, modelTotalBytes } from '../src/model-store.js'
 
+test('package supports the stable and reviewed preview DSH lanes', async () => {
+  const [manifest, compatibility] = await Promise.all([
+    readFile(new URL('../package.json', import.meta.url), 'utf8').then(JSON.parse),
+    readFile(new URL('../compatibility.json', import.meta.url), 'utf8').then(JSON.parse),
+  ])
+  const range = [...compatibility.supported, ...compatibility.previews].join(' || ')
+  assert.equal(compatibility.latestTested, '0.1.1-rc.2')
+  assert.deepEqual(compatibility.previews, ['0.1.2-alpha.2'])
+  for (const [name, version] of Object.entries(manifest.peerDependencies)) {
+    if (name.startsWith('@deepseek-ai/dsh-')) assert.equal(version, range, name)
+  }
+})
+
 test('every local model source is immutable and integrity pinned', () => {
   assert.deepEqual(Object.keys(MODELS), ['sensevoice', 'paraformer', 'nemotron'])
   for (const [id, model] of Object.entries(MODELS)) {

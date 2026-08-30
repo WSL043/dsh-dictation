@@ -37,7 +37,7 @@
 DSH 标准命令：
 
 ```sh
-dsh plugin --profile web add dsh-dictation@0.1.0-beta.1
+dsh plugin --profile web add dsh-dictation@0.1.0-beta.2
 ```
 
 安装完成后请先保存正在进行的工作，再手动重启 DSH。

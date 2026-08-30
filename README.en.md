@@ -37,7 +37,7 @@ One microphone sits directly beside Send. Start speaking, review the editable tr
 Standard DSH command:
 
 ```sh
-dsh plugin --profile web add dsh-dictation@0.1.0-beta.1
+dsh plugin --profile web add dsh-dictation@0.1.0-beta.2
 ```
 
 Save active work and restart DSH manually after installation.
